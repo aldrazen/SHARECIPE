@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_sample/SHARECIPE/profile.dart';
 import 'package:firebase_sample/SHARECIPE/home.dart';
 import 'package:flutter/material.dart';
 

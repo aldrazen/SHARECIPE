@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_sample/SHARECIPE/drawer.dart';
+
 import 'package:firebase_sample/SHARECIPE/post.dart';
 import 'package:firebase_sample/SHARECIPE/postClicked.dart';
 import 'package:flutter/material.dart';
@@ -88,11 +87,13 @@ class _ProjectHomeState extends State<ProjectHome> {
             margin: const EdgeInsets.only(left: 5, right: 5, top: 5),
             child: InkWell(
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ProjectPost(),
-                  ),
-                );
+                setState(() {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ProjectPost(viewPost: post),
+                    ),
+                  );
+                });
               },
               child: Card(
                 child: Column(
@@ -111,7 +112,7 @@ class _ProjectHomeState extends State<ProjectHome> {
                               }
                               return Center(
                                 child: CircularProgressIndicator(
-                                  color: Color.fromARGB(255, 176, 41, 39),
+                                  color: const Color.fromARGB(255, 176, 41, 39),
                                   value: loadingProgress.expectedTotalBytes !=
                                           null
                                       ? loadingProgress.cumulativeBytesLoaded /

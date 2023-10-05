@@ -1,7 +1,6 @@
 import 'package:firebase_sample/SHARECIPE/authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:firebase_sample/SHARECIPE/login.dart';
 
 class ProjectSplashscreen extends StatefulWidget {
   const ProjectSplashscreen({super.key});

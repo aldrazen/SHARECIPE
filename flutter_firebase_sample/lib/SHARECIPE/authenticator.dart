@@ -1,6 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
-import 'package:firebase_sample/SHARECIPE/login.dart';
 import 'package:firebase_sample/SHARECIPE/profile.dart';
 import 'package:firebase_sample/SHARECIPE/home.dart';
 import 'package:firebase_sample/SHARECIPE/toggleScreen.dart';

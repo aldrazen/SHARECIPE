@@ -1,19 +1,21 @@
+import 'package:firebase_sample/SHARECIPE/post.dart';
 import 'package:flutter/material.dart';
 
 class ProjectPost extends StatefulWidget {
-  const ProjectPost({super.key});
+  const ProjectPost({super.key, required this.viewPost});
+  final Post viewPost;
 
   @override
   State<ProjectPost> createState() => _ProjectPostState();
 }
 
 class _ProjectPostState extends State<ProjectPost> {
-  var boldText = TextStyle(
+  var boldText = const TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.bold,
   );
 
-  var bigText = TextStyle(
+  var bigText = const TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.bold,
     color: Color.fromARGB(255, 176, 41, 39),
@@ -60,11 +62,11 @@ class _ProjectPostState extends State<ProjectPost> {
       );
   buildRowTabs() => Row(
         children: [
-          buildIconTab(Icons.kitchen, 'PREP', '25 mins'),
+          buildIconTab(Icons.kitchen, 'PREP', widget.viewPost.prepTime),
           SizedBox(width: 16),
-          buildIconTab(Icons.timer, 'COOK', '1 hr'),
+          buildIconTab(Icons.timer, 'COOK', widget.viewPost.cookTime),
           SizedBox(width: 16),
-          buildIconTab(Icons.restaurant, 'SERVING', '4-6'),
+          buildIconTab(Icons.restaurant, 'SERVING', widget.viewPost.serving),
         ],
       );
 
@@ -77,7 +79,7 @@ class _ProjectPostState extends State<ProjectPost> {
 
   Widget buildDirection(String direction) {
     return ListTile(
-      leading: Icon(
+      leading: const Icon(
         Icons.arrow_right_outlined,
         color: Color.fromARGB(255, 176, 41, 39),
       ),
@@ -89,30 +91,11 @@ class _ProjectPostState extends State<ProjectPost> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            InkWell(
-              borderRadius: const BorderRadius.all(Radius.circular(17)),
-              splashColor: const Color.fromARGB(255, 255, 119, 0),
-              onTap: () {},
-              child: const CircleAvatar(
-                backgroundImage: AssetImage(
-                  'images/ssssss.png',
-                ),
-                radius: 22,
-              ),
-            ),
-            Text(
-              'chldvch',
-              style: bigText,
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.menu),
-            ),
-          ],
+        title: Text(
+          widget.viewPost.accName,
+          style: bigText,
         ),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -133,44 +116,67 @@ class _ProjectPostState extends State<ProjectPost> {
                             backgroundColor:
                                 const Color.fromARGB(255, 176, 41, 39),
                             radius: 28,
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(widget.viewPost.accPF),
+                              radius: 27,
+                            ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Expanded(
                             child: Text(
-                              'Garlic Lemon Chicken with Green Beans and Potatoes',
+                              widget.viewPost.postDesc,
                               style: boldText,
                             ),
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(25),
-                        child: Image.asset('images/food1.jpg'),
+                        child: Image.network(
+                          widget.viewPost.postImage,
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            }
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: Color.fromARGB(255, 176, 41, 39),
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Container(
                         child: Row(
                           children: [
                             buttonActions(Icons.favorite),
-                            Text(
+                            const Text(
                               '1.1k hearts',
                               style: TextStyle(fontSize: 16),
                             ),
-                            SizedBox(
-                              width: 95,
+                            const SizedBox(
+                              width: 70,
                             ),
                             buildRowTabs(),
                           ],
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 25,
                       ),
                       Text(
@@ -210,7 +216,7 @@ class _ProjectPostState extends State<ProjectPost> {
                               'Roast for 50 minutes. Remove the chicken from the dish or skillet. Place the beans and potatoes back in oven for 10 minutes more or until the potatoes are tender. Place a chicken breast on each of 4 serving plates; divide the green beans and potatoes equally. Serve warm.'),
                         ],
                       ),
-                      SizedBox(height: 20.0),
+                      const SizedBox(height: 20.0),
                     ],
                   ),
                 )

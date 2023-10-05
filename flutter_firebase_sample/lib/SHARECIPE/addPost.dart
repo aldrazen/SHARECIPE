@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_sample/photo.dart';
 import 'package:firebase_sample/SHARECIPE/account.dart';
 import 'package:firebase_sample/SHARECIPE/post.dart';
-import 'package:firebase_sample/SHARECIPE/profile.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'dart:math';
@@ -330,7 +329,7 @@ class _AddPostState extends State<AddPost> {
 
   @override
   void initState() {
-    errorMessage = "This is an error";
+    errorMessage = "This is an error!";
 
     super.initState();
   }

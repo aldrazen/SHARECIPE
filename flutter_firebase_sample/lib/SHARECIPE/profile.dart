@@ -6,6 +6,7 @@ import 'package:firebase_sample/SHARECIPE/drawer.dart';
 import 'package:firebase_sample/SHARECIPE/post.dart';
 import 'package:firebase_sample/SHARECIPE/addPost.dart';
 import 'package:firebase_sample/SHARECIPE/editProfile.dart';
+import 'package:firebase_sample/SHARECIPE/postClicked.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
@@ -33,6 +34,7 @@ class _ProfilePageState extends State<ProfilePage> {
   );
 
   var descText = const TextStyle(fontSize: 14);
+
   //TO ACCESS THE CURRENT ACCOUNT'S PROFILE
   Future<Account> accountProfile() async {
     final userAccount = FirebaseAuth.instance.currentUser!;
@@ -190,19 +192,6 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       );
 
-  //QUERY TO ACCESS ACCOUNT POST OF CURRENT COLLECTION FROM POST COLLECTION
-  Stream<List<Post>> accountPost() {
-    final userAccount = FirebaseAuth.instance.currentUser!;
-    return FirebaseFirestore.instance
-        .collection('Post')
-        .doc(userAccount.uid)
-        .collection('Account_post')
-        .orderBy('Post_time', descending: true)
-        .snapshots()
-        .map((snapshot) =>
-            snapshot.docs.map((doc) => Post.fromJson(doc.data())).toList());
-  }
-
   buttonActions(iconVal) => IconButton(
         onPressed: () {
           setState(() {
@@ -251,14 +240,21 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       );
 
+  //QUERY TO ACCESS ACCOUNT POST OF CURRENT COLLECTION FROM POST COLLECTION
+  Stream<List<Post>> accountPost() {
+    final userAccount = FirebaseAuth.instance.currentUser!;
+    return FirebaseFirestore.instance
+        .collection('Post')
+        .doc(userAccount.uid)
+        .collection('Account_post')
+        .orderBy('Post_time', descending: true)
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => Post.fromJson(doc.data())).toList());
+  }
+
   Widget postList(Post post) => Column(
         children: [
-          Container(
-            margin: const EdgeInsets.only(
-              left: 20,
-              top: 5,
-            ),
-          ),
           Container(
             margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
             child: Column(
@@ -290,23 +286,34 @@ class _ProfilePageState extends State<ProfilePage> {
                 const SizedBox(height: 5),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(25),
-                  child: Image.network(
-                    post.postImage,
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      }
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: Color.fromARGB(255, 176, 41, 39),
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ProjectPost(viewPost: post),
+                          ),
+                        );
+                      });
                     },
+                    child: Image.network(
+                      post.postImage,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        }
+                        return Center(
+                          child: CircularProgressIndicator(
+                            color: Color.fromARGB(255, 176, 41, 39),
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(

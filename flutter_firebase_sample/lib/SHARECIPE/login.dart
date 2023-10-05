@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_sample/SHARECIPE/register.dart';
+
 import 'package:firebase_sample/SHARECIPE/resetpassword.dart';
 import 'package:flutter/material.dart';
 
